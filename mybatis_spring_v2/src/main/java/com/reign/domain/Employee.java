@@ -1,5 +1,7 @@
 package com.reign.domain;
 
+import com.reign.domain.other.Dept;
+
 /**
  * @ClassName Employee
  * @Description TODO
@@ -16,7 +18,7 @@ public class Employee {
     private String lastName;
     private int gender;
     private String email;
-
+    private Dept dept;
 
     public int getId() {
         return id;

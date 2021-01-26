@@ -7,6 +7,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @ClassName EmployeeTest
  * @Description TODO
@@ -46,7 +51,35 @@ public class EmployeeTest {
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryConfig.getSqlSessionFactory();
         SqlSession sqlSession = sqlSessionFactory.openSession();
         EmployeeMapper employee = sqlSession.getMapper(EmployeeMapper.class);
-        System.out.println(employee.selectEmployeeByLastNameAndEmail("测试插入","多参数@email"));
+        System.out.println(employee.selectEmployeeByLastNameAndEmail("\"laoda\"","3323@qq.com"));
+        sqlSession.close();
+    }
+
+    @Test
+    public void testSelectByMultiParamMap() {
+        SqlSessionFactory sqlSessionFactory = SqlSessionFactoryConfig.getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        EmployeeMapper employee = sqlSession.getMapper(EmployeeMapper.class);
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("lastName","laoda");
+        paramMap.put("email","3323@qq.com");
+        System.out.println(employee.selectEmployeeByMap(paramMap));
+        sqlSession.close();
+    }
+
+
+    /**
+     * 测试传入Collection参数
+     */
+    @Test
+    public void testSelectByCollection() {
+        SqlSessionFactory sqlSessionFactory = SqlSessionFactoryConfig.getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        EmployeeMapper employee = sqlSession.getMapper(EmployeeMapper.class);
+        Collection<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        System.out.println(employee.selectByCollection(ids));
         sqlSession.close();
     }
 
@@ -86,5 +119,8 @@ public class EmployeeTest {
         employee.delEmp(2);
         sqlSession.close();
     }
+
+
+
 
 }
