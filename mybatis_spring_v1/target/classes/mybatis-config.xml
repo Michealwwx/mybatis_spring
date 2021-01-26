@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 引入外部配置文件，替换其中的配置-->
+    <properties resource="jdbc.properties"></properties>
+
+    <!-- 配置mybatis全局-->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--为属性取别名，方便获取,别名不区分大小写-->
+    <typeAliases>
+        <typeAlias type="com.reign.domain.Employee" alias="employee"></typeAlias>
+        <!--批量取别名，package:为某个包下得所有类批量取别名
+        name:指定报名，为当前包以及下面所有的后代包的每一个类都起一个默认别名，类名小写
+        问题：如果父包和子包都有一个类Employee，mybatis默认会为这两个Employee都取别名为employee，发生冲突，mybatis就会报错
+        解决：批量起别名的情况下，使用@Alias注解为某个类型指定新的别名
+        注意：一定不能和mybatis对于各种类型的别名相同，否则会报错
+        -->
+        <package name="com.reign.domain"/>
+    </typeAliases>
+
+
+    <!--类型处理器，将java中类型与MySQL类型做映射-->
+    <typeHandlers></typeHandlers>
+
+    <!--插件,用来拦截Executor，ParameterHandler，ResultHandler，StatementHandler等四个类，原理就是动态代理-->
+<!--    <plugins>-->
+<!--        <plugin interceptor=""></plugin>-->
+<!--    </plugins>-->
+
+    <!--全局运行环境,mybatis可以配置多种环境，根据id区分，每个environment配置一个具体的环境信息
+   必须有transactionManager和dataSource两个标签,可以修改default属性变更环境
+   1.transactionManager有两种取值，JDBC和MANAGED，JDBC表示采用mysql的事务管理，MANAGED表示交给容器管理；比如spring容器
+    也可以自定义事务管理器，实现TransactionFactory接口，type指定为全类名
+    2.datasource，数据源，UNPOOLED|POOLED|JDNI ，也可以自定义的连接池，需要实现DataSourceFactory接口，getDataSource方法返回
+    -->
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+
+<!--        <environment id="test">-->
+<!--            <transactionManager type=""></transactionManager>-->
+<!--            <dataSource type=""></dataSource>-->
+<!--        </environment>-->
+    </environments>
+
+
+    <!--支持多数据库厂商标准，不常用-->
+<!--    <databaseIdProvider type=""></databaseIdProvider>-->
+
+    <!--sql映射
+    resource：引用类路径下得sql映射文件；
+    url：引用网络路径或者磁盘路径下的sql映射文件
+
+    class：引用（注册）接口
+    如果只采用class，
+    1.有sql映射文件，则必须将其mapper接口和mapper.xml放在同一目录下，并且名字必须一样
+    2.没有sql映射文件，所有的sql都是利用注解写在接口上-->
+    <mappers>
+<!--        <mapper resource="mapper/Employee.xml"/>-->
+        <mapper class="com.reign.mapper.annotationMapper.AnnotationEmployeeMapper"></mapper>
+    </mappers>
+</configuration>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reign.mapper.EmployeeMapper">
+    <select id="selectEmployeeById" resultType="employee">
+        <!--单参数名称随便写-->
+        select * from Employee where id = #{sdsd}
+    </select>
+
+
+    <select id="selectEmployeeByLastNameAndEmail" resultType="employee">
+   select * from Employee where last_name=#{asd} and email=#{email};
+  </select>
+
+
+    <!--parameterType可以省略-->
+    <insert id="addEmp" parameterType="com.reign.domain.Employee"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into Employee(last_name,email,gender) values (#{lastName},#{email},#{gender});
+    </insert>
+
+    <update id="updateEmp">
+        update employee set last_name=#{lastName},email=#{email},gender=#{gender} where id=#{id};
+    </update>
+
+    <delete id="delEmp">
+        delete from employee where id=#{id};
+    </delete>
+</mapper>
