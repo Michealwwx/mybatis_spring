@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reign.mapper.EmployeeMapperPlus">
+
+
+    <!--resulltMap自定义某个javabean的封装规则，
+    type，自定义规则的java类型
+    id：唯一id，方便引用-->
+    <resultMap id="MyResultMap" type="com.reign.domain.Employee">
+
+        <!--
+        id：定义主键,可以用result定义，用id，mybatis会做优化
+        column：指定哪一列
+        property：指定对应的javabean属性;
+        如果数据库中字段和javabean字段完全一致，那该属性不用自定义
+        -->
+        <id column="id" property="id"></id>
+        <result column="last_name" property="lastName"></result>
+    </resultMap>
+
+    <!--resultType和resultMap只能二选一-->
+    <select id="selectEmployeeById" resultMap="MyResultMap">
+        <!--单参数名称随便写-->
+        select * from employee where id= #{lastName};
+    </select>
+
+
+
+    <resultMap id="Map1" type="com.reign.domain.Employee">
+        <id column="id" property="id"></id>
+        <result column="last_name" property="lastName"></result>
+        <result column="gender" property="gender"></result>
+        <result column="dept" property="dept.id"></result>
+        <result column="dept_name" property="dept.deptName"></result>
+    </resultMap>
+    <select id="getEmpAndDeptById" resultMap="Map1">
+     select  e.id id,e.last_name lastName,e.gender gender,e.email email, e.dept deptId,d.dept_name deptName from employee e,dept d where e.id=d.id and e.id=#{id};
+    </select>
+
+
+</mapper>
